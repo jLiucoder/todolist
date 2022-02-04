@@ -4639,6 +4639,11 @@
   "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.9.tgz"
   "version" "5.4.9"
 
+"react-native-platform-touchable@^1.1.1":
+  "integrity" "sha1-/eSsxl7qWF0osWTQw3FqQhKaaOQ="
+  "resolved" "https://registry.npmjs.org/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz"
+  "version" "1.1.1"
+
 "react-native-tab-view@^3.1.1":
   "integrity" "sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw=="
   "resolved" "https://registry.npmjs.org/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz"

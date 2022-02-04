@@ -15,10 +15,10 @@ export default function AddTodo({submitHandler}){
       <TextInput 
         clearButtonMode="always"
         style = {styles.input}
-        placeholder='type here'
+        placeholder='Input here'
         onChangeText={changeHandler}  
       />
-      <Button onPress={()=>submitHandler(text)} title='add todo' color='grey'/>
+      <Button onPress={()=>submitHandler(text)} title='add todo'/>
     </View>
   )
 }
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderColor: 'black',
     borderRadius: 20,
-    backgroundColor: 'grey',
+    backgroundColor: '#6a7394',
     overflow: 'hidden',
  }
 })

@@ -6,8 +6,10 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import Header from './components/header';
 import TodoItem from './components/TodoItem';
 import AddTodo from './components/addTodo'
+import { setDisabled } from 'react-native/Libraries/LogBox/Data/LogBoxData';
 
 export default function App() {
+  
   const [todos, setTodos] = useState([
     {text: 'buy coffee', key: '1', selected: false},
     {text: 'buy shoes', key: '2', selected: false},
@@ -23,25 +25,30 @@ export default function App() {
   const[labelone, setLabelOne] = useState("label one")
   const[labeltwo, setLabelTwo] = useState("label two")
 
-  const pressHandler=(key)=>{
-    setTodos((prevTodos)=>{
-      return prevTodos.filter(todo=> todo.key != key)
-    });
-  }
 
-  const longPressHandler=(key)=>{
+  const pressHandler=(key)=>{
     setTodos((todos)=>{
 
       todos.forEach(todo => {
-        if (todo.key === key){
+        if (todo.key === key && todo.selected === false){
           todo.selected = true
-          
           alert(todo.selected)
-        }
+        }else if(todo.key === key && todo.selected === true ){
+          todo.selected = false
+          alert(todo.selected)
+        } 
       });
-      
-      return todos;
+       
+      return todos;  
     })
+  } 
+
+  const longPressHandler=(key)=>{
+    setTodos((prevTodos)=>{
+          return prevTodos.filter(todo=> todo.key != key)
+        });
+
+     
   }
 
 
@@ -50,7 +57,7 @@ export default function App() {
     setTodos((prevTodos)=>{
      
       if(text == ""){
-        
+        alert("nothing to add!")
         return prevTodos
       }
       
@@ -69,9 +76,23 @@ export default function App() {
     setLabelTwo(labels[1])
   }
 
-  const joinItem = (text)=>{
-    var newText = labelone + "," + labeltwo
-    onChangeText(newText)
+  const joinItem = ()=>{
+     
+    // setTodos((todos)=>{
+
+    //   todos.forEach(todo => {
+    //     if ( todo.selected === true){
+    //       tempString.push(todo.text + '/')
+          
+    //     }
+    //     } 
+    //   );
+      
+    //   return [
+    //     {text: tempString, key: Math.random().toString(), selected: false},
+    //     ...todos
+    //   ];
+    // })
   }
 
   return (
@@ -84,16 +105,24 @@ export default function App() {
       {/**content */}
       <View style={styles.content}>
         <AddTodo submitHandler = {submitHandler}/>
-        <View style={styles.buttonContainer}>
-          <Button title="Split" onPress={()=>splitItem()} color = 'grey'/>
-          <Button title="Join" onPress={()=>joinItem()} color = 'grey'/>
-        </View>
+        <View style={styles.fixToText}>
+        <Button
+          title="Split"
+          onPress={() => {splitItem}}
+        />
+        <Button
+          title="Join"
+          onPress={joinItem()}
+        />
+      </View>
         <View style ={styles.list}>
           <FlatList
             data = {todos}
             onChangeText={onChangeText}
-            value = {text}
+            value = {text} 
+            
             renderItem={({item})=>(
+              
               <TodoItem item = {item} pressHandler={pressHandler} longPressHandler = {longPressHandler}/>
             )}
           />
@@ -109,7 +138,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor : 'black'
+    backgroundColor : '#030b2b'
   },
   content: {
     margin: -30,
@@ -119,8 +148,17 @@ const styles = StyleSheet.create({
   list:{
     marginTop: 20,
   },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    
+  },
   buttonContainer:{
     flex:1
+  },
+  true:{
+
   }
+
  
 });
