@@ -3,7 +3,7 @@ import { Text, StyleSheet, TouchableOpacity,} from 'react-native';
 
 
 export default function TodoItem({item, pressHandler,longPressHandler}){
-  
+  state = {item: item}
   return(
     <TouchableOpacity onPress={()=>pressHandler(item.key) }color='white' onLongPress={()=>longPressHandler(item.key)}>
       <Text style= {[styles.item, item.selected===true? styles.itemtrue : styles.itemfalse]}>
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderColor: 'black',
     borderRadius: 20,
-    backgroundColor: '#030b2b',
+    backgroundColor: '#99a2c2',
     overflow: 'hidden',
     color: 'white',
     textAlign: 'center'
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderColor: 'black',
     borderRadius: 20,
-    backgroundColor: '#6a7394',
+    backgroundColor: '#4c5575',
     overflow: 'hidden',
     color: 'white',
     textAlign: 'center'
