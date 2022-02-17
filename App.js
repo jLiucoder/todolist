@@ -1,25 +1,39 @@
 // import * as React, {useState}from 'react';
 
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity, VirtualizedList } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import Header from './components/header';
 import TodoItem from './components/TodoItem';
 import AddTodo from './components/addTodo';
+import { Alert, SectionList } from 'react-native-web';
 
 export default function App() {
+
+  let loadUrlAddress = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user=jiayuliu"
+  let saveUrlAddress = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user=jiayuliu"
+  let InitialLoadUrl = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user=jerry"
   tempString = ''
+  
   const [todos, setTodos] = useState([
-    {text: 'buy coffee', key: '1', selected: false},
-    {text: 'buy shoes', key: '2', selected: false},
-    {text: 'code', key: '3',selected: false},
-    {text: 'eat', key: '4', selected: false},
-    {text: 'workout', key: '5', selected: false},  
-    {text: 'haha', key: '6',selected: false},
-    {text: 'selfteach', key: '7',selected: false},
-    {text: 'wathever', key: '8',selected: false},
+    {text: 'buy coffee', key: Math.random().toString(), selected: false},
+    {text: 'buy shoes', key: Math.random().toString(), selected: false},
+    {text: 'code', key: Math.random().toString(),selected: false},
+    {text: 'eat', key: Math.random().toString(), selected: false},
+    {text: 'workout', key: Math.random().toString(), selected: false},  
+    {text: 'haha', key: Math.random().toString(),selected: false},
+    {text: 'selfteach', key: Math.random().toString(),selected: false},
+    {text: 'wathever', key: Math.random().toString(),selected: false},
+    
   ]);
 
+  useEffect(() => {
+    loadList(InitialLoadUrl, todos)
+  }, [])
+  
+ 
+  
+  // Alert.alert('loaded remote source')
   const[text, onChangeText]=useState("new item")
   const[labelone, setLabelOne] = useState("label one")
   const[labeltwo, setLabelTwo] = useState("label two")
@@ -49,6 +63,7 @@ export default function App() {
        
       return todos;  
     })
+   
   } 
 
   const longPressHandler=(key)=>{
@@ -59,6 +74,7 @@ export default function App() {
 
      
   }
+
 
 
   const submitHandler=(text)=>{
@@ -114,6 +130,36 @@ export default function App() {
     
   }
 
+
+
+  async function loadList(url, list){
+    const response = await fetch(url)
+    const names = await response.json()
+
+    names.forEach((item)=>{
+      list.push({text:item.text, key:Math.random().toString(), selected:false})
+    })
+
+    const newList = list.map((item)=>{return item})
+    setTodos(newList)
+    
+  } 
+
+ 
+  async function saveList(url, list){
+    const requestOptions ={
+      method: 'POST',
+      headers:{'Content-Type': 'application/json'},
+      body:JSON.stringify(list)
+    }
+    const response = await fetch(url, requestOptions)
+    
+  } 
+
+
+
+  
+
   return (
     
     <View style={styles.container}> 
@@ -133,13 +179,22 @@ export default function App() {
           title="Join"
           onPress={joinItem}
         />
+        <Button
+          title="Load list"
+          onPress={()=>loadList(loadUrlAddress, todos)}
+        />
+        <Button
+          title="Save list"
+          onPress={()=>saveList(saveUrlAddress, todos)}
+        />
       </View>
         <View style ={styles.list}>
-          <FlatList
+          <VirtualizedList
             data = {todos}
             onChangeText={onChangeText}
             value = {text}  
-            
+            getItem={(data, index) => data[index]}
+            getItemCount={data => data.length}
             renderItem={({item})=>(
               
               <TodoItem item = {item} pressHandler={pressHandler} longPressHandler = {longPressHandler}/>
@@ -160,6 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor : '#030b2b'
   },
   content: {
+    flex:1,
     margin: -30,
     marginBottom: 100,
     padding: 40,
@@ -175,9 +231,6 @@ const styles = StyleSheet.create({
   buttonContainer:{
     flex:1
   },
-  true:{
-
-  }
 
  
 });

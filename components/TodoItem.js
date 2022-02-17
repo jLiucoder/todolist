@@ -3,7 +3,7 @@ import { Text, StyleSheet, TouchableOpacity,} from 'react-native';
 
 
 export default function TodoItem({item, pressHandler,longPressHandler}){
-  state = {item: item}
+
   return(
     <TouchableOpacity onPress={()=>pressHandler(item.key) }color='white' onLongPress={()=>longPressHandler(item.key)}>
       <Text style= {[styles.item, item.selected===true? styles.itemtrue : styles.itemfalse]}>
